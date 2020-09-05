@@ -9,9 +9,14 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.XboxController.Button;
+import frc.robot.Constants;
 import frc.robot.commands.ExampleCommand;
+import frc.robot.commands.SolenoidOperation;
 import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.subsystems.PneumaticTest;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 /**
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -22,10 +27,11 @@ import edu.wpi.first.wpilibj2.command.Command;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
+  private final PneumaticTest m_pneumaticTest = new PneumaticTest();
 
   private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
-
-
+  
+  public XboxController m_xboxController = new XboxController(Constants.kXboxControllerPort);
 
   /**
    * The container for the robot.  Contains subsystems, OI devices, and commands.
@@ -42,6 +48,12 @@ public class RobotContainer {
    * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
+    new JoystickButton(m_xboxController, Button.kX.value)
+    .whenPressed(new SolenoidOperation(m_pneumaticTest, 0));
+    new JoystickButton(m_xboxController, Button.kY.value)
+    .whenPressed(new SolenoidOperation(m_pneumaticTest, 1));
+    new JoystickButton(m_xboxController, Button.kA.value)
+    .whenPressed(new SolenoidOperation(m_pneumaticTest, 2));
   }
 
 
